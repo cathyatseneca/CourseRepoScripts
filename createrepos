@@ -38,11 +38,11 @@ logfilename="logFileName"
 while IFS="|" read notused realname githubid 
 do
 
-    realname=${realname//[[:blank:]]/}
-    githubid=${githubid//[[:blank:]]/}
-    
-    #make a team using named after realname
-    response=`curl -u "$yourusername:$token" https://api.github.com/orgs/$organization/teams -d '{"name":"'$realname'"}'`
+	realname=${realname//[[:blank:]]/}
+	githubid=${githubid//[[:blank:]]/}
+
+	#make a team using named after realname
+	response=`curl -u "$yourusername:$token" https://api.github.com/orgs/$organization/teams -d '{"name":"'$realname'"}'`
 	#get the id of the team out of the response
 	prop='id'
 	result=`jsonval`
