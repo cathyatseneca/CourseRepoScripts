@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#based on: https://gist.github.com/caniszczyk/3856584
+
 #put in your github id here
 yourusername="YourGithubId"
 

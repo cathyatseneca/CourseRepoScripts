@@ -60,5 +60,5 @@ do
 	response4=`curl -u "$yourusername:$token" -X PUT https://api.github.com/teams/$teamid/repos/$organization/$realname -d '{"permission":"push"}'`
 
 	#print to a log file the repo/team name, github id and teamid number
-	echo "$realname|$githubid|$teamid" >> $logfilename
+	echo "|$realname|$githubid|$teamid|" >> $logfilename
 done < $inputfile

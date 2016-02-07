@@ -16,7 +16,7 @@ organization="YourOrganizationName"
 #each line of file should look like this:
 #nameofrepo|githubid|teamid
 inputfile="nameOfInputFile"
-while IFS="|" read realname githubid teamid
+while IFS="|" read notused realname githubid teamid
 do
 
     realname=${realname//[[:blank:]]/}
@@ -24,8 +24,8 @@ do
     echo "$realname|$githubid|$teamid"
 
     #delete repo
-    curl -u "$yourusername:$yourtoken" -X DELETE https://api.github.com/repos/$organization/$realname
+    curl -u "$yourusername:$token" -X DELETE https://api.github.com/repos/$organization/$realname
 
     #delete teams
-    curl -u "$yourusername:$yourtoken" -X DELETE https://api.github.com/teams/$teamid
+    curl -u "$yourusername:$token" -X DELETE https://api.github.com/teams/$teamid
 done < $inputfile
