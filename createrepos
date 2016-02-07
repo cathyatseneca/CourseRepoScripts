@@ -33,7 +33,7 @@ inputfile="nameOfInputFile"
 #id associated with creation of of the repos.  This file can be
 #be used by the clearorg script that will delete all teams and repos
 #(great for end of semester cleanup)
-logfilename="dsalog"
+logfilename="logFileName"
 
 while IFS="|" read notused realname githubid 
 do
