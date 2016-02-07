@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#put in your github id here
+yourusername="YourGithubId"
+
+#generate a personal token from your github settings
+#menu-->personal access token.  Make sure you have
+#repo,admin:org checked for your token.  If you want to use the 
+#deletion script with same token also check delete_repo
+token="theAccessTokenFromGithub"
+
+#name of the organization you want repo to go in
+organization="YourOrganizationName"
+
+curl -u "$yourusername:$token" -s https://api.github.com/orgs/$organization/repos?per_page=200 | ruby -rubygems -e 'require "json"; JSON.load(STDIN.read).each { |repo| %x[git clone #{repo["ssh_url"]} ]}'

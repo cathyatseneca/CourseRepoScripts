@@ -1,0 +1,64 @@
+#!/bin/bash
+
+#this function (and related code) for extracting a particular json
+#value comes from: https://gist.github.com/cjus/1047794
+function jsonval {
+    temp=`echo $response | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $prop`
+    echo ${temp##*|}
+}
+
+#put in your github id here
+yourusername="YourGithubId"
+
+#generate a personal token from your github settings
+#menu-->personal access token.  Make sure you have
+#repo,admin:org checked for your token.  If you want to use the 
+#deletion script with same token also check delete_repo
+token="theAccessTokenFromGithub"
+
+#name of the organization you want repo to go in
+organization="YourOrganizationName"
+
+#name of file where you stored the user name/github id info
+#the file format is a markdown wiki with two
+#columns, the first is your student's real name
+#the second is their githubid.  Remove the header
+#and bar drawing rows from it
+#each line is:
+#| student name | githubid |
+inputfile="nameOfInputFile"
+
+#name of the file you want the log to be written to
+#this log will store the name, github id and the team 
+#id associated with creation of of the repos.  This file can be
+#be used by the clearorg script that will delete all teams and repos
+#(great for end of semester cleanup)
+logfilename="dsalog"
+
+while IFS="|" read notused realname githubid 
+do
+
+    realname=${realname//[[:blank:]]/}
+    githubid=${githubid//[[:blank:]]/}
+    
+    #make a team using named after realname
+    response=`curl -u "$yourusername:$token" https://api.github.com/orgs/$organization/teams -d '{"name":"'$realname'"}'`
+	#get the id of the team out of the response
+	prop='id'
+	result=`jsonval`
+	line=( $result )
+	teamid=${line[1]}
+
+
+	#add github id to team created
+	response2=`curl -u "$yourusername:$token" -X PUT https://api.github.com/teams/$teamid/memberships/$githubid`
+
+	#make a private repository named after realname
+	response3=`curl -u "$yourusername:$token" https://api.github.com/orgs/$organization/repos -d '{"name":"'$realname'","private":true}'`  
+
+	#assign team to the repository
+	response4=`curl -u "$yourusername:$token" -X PUT https://api.github.com/teams/$teamid/repos/$organization/$realname -d '{"permission":"push"}'`
+
+	#print to a log file the repo/team name, github id and teamid number
+	echo "$realname|$githubid|$teamid" >> $logfilename
+done < $inputfile
