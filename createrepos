@@ -31,7 +31,7 @@ inputfile="nameOfInputFile"
 #name of the file you want the log to be written to
 #this log will store the name, github id and the team 
 #id associated with creation of of the repos.  This file can be
-#be used by the clearorg script that will delete all teams and repos
+#be used by the deleteallrepo script that will delete all teams and repos
 #(great for end of semester cleanup)
 logfilename="logFileName"
 
