@@ -8,25 +8,23 @@ function jsonval {
 }
 
 #put in your github id here
-yourusername="your github id"
+yourusername="YourAccessID"
 
 #generate a personal token from your github settings
 #menu-->personal access token.  Make sure you have
 #repo,admin:org checked for your token.  If you want to use the 
 #deletion script with same token also check delete_repo
-token="access token"
+token="YourPersonalAccessToken"
 
 #name of the organization you want repo to go in
-organization="your github organization"
+organization="YourGithubOrganization"
 
-#name of file where you stored the user name/github id info
-#the file format is a markdown wiki with two
-#columns, the first is your student's real name
-#the second is their githubid.  Remove the header
-#and bar drawing rows from it
-#each line is:
-#| student name | githubid |
-inputfile="csv file"
+#name of file where you stored the real names and github ids
+#The default setup is a csv downloaded from a google spreadsheet file
+#the file was filled using a form with 3 fields, 1st field is full name
+#second field is some other unique identifier and 3rd field is githubid
+#Any CSV file will work, adjust script accordingly
+inputfile="YourCSVFile"
 
 #name of the file you want the log to be written to
 #this log will store the name, github id and the team 
@@ -41,7 +39,7 @@ logfilename="logfile.txt"
 
 {
 #this read will allow you to ignore the first line if it is a header line.  Comment it out
-#if you have no header
+#if you have no header comment out the next line
 read
 #if you have more than 4 columns, add it there
 while IFS="," read column1 column2 column3 column4
