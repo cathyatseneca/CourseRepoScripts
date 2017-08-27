@@ -8,7 +8,7 @@ function jsonval {
 }
 
 #put in your github id here
-yourusername="YourAccessID"
+yourusername="YourGithbuID"
 
 #generate a personal token from your github settings
 #menu-->personal access token.  Make sure you have
