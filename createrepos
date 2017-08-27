@@ -8,16 +8,16 @@ function jsonval {
 }
 
 #put in your github id here
-yourusername="YourGithubId"
+yourusername="your github id"
 
 #generate a personal token from your github settings
 #menu-->personal access token.  Make sure you have
 #repo,admin:org checked for your token.  If you want to use the 
 #deletion script with same token also check delete_repo
-token="theAccessTokenFromGithub"
+token="access token"
 
 #name of the organization you want repo to go in
-organization="YourOrganizationName"
+organization="your github organization"
 
 #name of file where you stored the user name/github id info
 #the file format is a markdown wiki with two
@@ -26,39 +26,105 @@ organization="YourOrganizationName"
 #and bar drawing rows from it
 #each line is:
 #| student name | githubid |
-inputfile="nameOfInputFile"
+inputfile="csv file"
 
 #name of the file you want the log to be written to
 #this log will store the name, github id and the team 
 #id associated with creation of of the repos.  This file can be
-#be used by the deleteallrepo script that will delete all teams and repos
-#(great for end of semester cleanup)
-logfilename="logFileName"
+#be used by both the deleteallrepos script and the cloneall repos script
+#the idea is that not necessarily ever repo in the organization is interesting to you.
+#You may need to keep a history of student work for more time than a second
+#running of a course. This allows you to log together related repos so you can 
+#work with them together.
+logfilename="logfile.txt"
 
-while IFS="|" read notused realname githubid 
+
+{
+#this read will allow you to ignore the first line if it is a header line.  Comment it out
+#if you have no header
+read
+#if you have more than 4 columns, add it there
+while IFS="," read column1 column2 column3 column4
 do
 
-	realname=${realname//[[:blank:]]/}
-	githubid=${githubid//[[:blank:]]/}
+	#strips carriage return off of last column (assuming column4 is last, modify if needed)
+	column4=`echo "$column4" | tr '\r' ' '`
+
+	#change column you have information stored here
+	realname=${column2//[[:blank:]]/}
+	githubid=${column4//[[:blank:]]/}
+
+#	echo "|"$realname"|"
+#	echo "|"$githubid"|"
 
 	#make a team using named after realname
+
 	response=`curl -u "$yourusername:$token" https://api.github.com/orgs/$organization/teams -d '{"name":"'$realname'"}'`
+
 	#get the id of the team out of the response
+
 	prop='id'
 	result=`jsonval`
 	line=( $result )
 	teamid=${line[1]}
 
-
+ 
 	#add github id to team created
+
 	response2=`curl -u "$yourusername:$token" -X PUT https://api.github.com/teams/$teamid/memberships/$githubid`
 
+	#echo $response2
+	
 	#make a private repository named after realname
+
 	response3=`curl -u "$yourusername:$token" https://api.github.com/orgs/$organization/repos -d '{"name":"'$realname'","private":true}'`  
 
+	#echo $response3
+	
 	#assign team to the repository
 	response4=`curl -u "$yourusername:$token" -X PUT https://api.github.com/teams/$teamid/repos/$organization/$realname -d '{"permission":"push"}'`
 
+#	echo $response4
+
 	#print to a log file the repo/team name, github id and teamid number
-	echo "|$realname|$githubid|$teamid|" >> $logfilename
-done < $inputfile
+ 	echo "|$realname|$githubid|$teamid|" >> $logfilename
+done
+} < $inputfile
+
+#handles last line, this is missed unless you have empty line at end of file
+
+column4=`echo "$column4" | tr '\r' ' '`
+realname=${column2//[[:blank:]]/}
+githubid=${column4//[[:blank:]]/}
+
+echo "|"$realname"|"
+echo "|"$githubid"|"
+response=`curl -u "$yourusername:$token" https://api.github.com/orgs/$organization/teams -d '{"name":"'$realname'"}'`
+
+#get the id of the team out of the response
+
+prop='id'
+result=`jsonval`
+line=( $result )
+teamid=${line[1]}
+
+ 
+#add github id to team created
+
+response2=`curl -u "$yourusername:$token" -X PUT https://api.github.com/teams/$teamid/memberships/$githubid`
+
+	#echo $response2
+	
+	#make a private repository named after realname
+
+response3=`curl -u "$yourusername:$token" https://api.github.com/orgs/$organization/repos -d '{"name":"'$realname'","private":true}'`  
+
+#	echo $response3
+	
+	#assign team to the repository
+response4=`curl -u "$yourusername:$token" -X PUT https://api.github.com/teams/$teamid/repos/$organization/$realname -d '{"permission":"push"}'`
+
+#	echo $response4
+
+	#appends to a log file the repo/team name, github id and teamid number
+echo "|$realname|$githubid|$teamid|" >> $logfilename
