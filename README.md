@@ -26,7 +26,7 @@ These scripts were originally designed to help set up private repos for students
      * Full Name
      * Student ID
      * githubid
-   
+   * if the ordering is not as above or you have more/less fields, you will need to adjust the script.
 3. Once the students have filled in their info.
 4. Do a quick check for duplicate entries and other mistakes...like brackets in the name field.
 5. Once its good, you can download the form as a csv file, place into the same directory as the createrepos script
@@ -40,7 +40,7 @@ These scripts were originally designed to help set up private repos for students
  
  You can verify it worked by checking the organization for the repos.
  
- #### to add additional students
+#### to add additional students
  
  To add additional students:
  * download the csv file
@@ -50,6 +50,6 @@ These scripts were originally designed to help set up private repos for students
  The additional entries will be logged into the same log file as long as you don't change the log file name in the script.
  
  
- #### To clone every repo associated log file
+#### To clone every repo associated log file
  
- The idea is that each semester you can run the script and create a set of repos for your students for a course.  However, you may need to keep a record of student work around for a length of time pass the end of the course.  At that point you may need to create 
+The idea is that each semester you can run the script and create a set of repos for your students for a course.  However, you may need to keep a record of student work around for a length of time pass the end of the course.  
