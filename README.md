@@ -27,11 +27,10 @@ These scripts were originally designed to help set up private repos for students
      * Student ID
      * githubid
    * if the ordering is not as above or you have more/less fields, you will need to adjust the script.
-3. Once the students have filled in their info.
-4. Do a quick check for duplicate entries and other mistakes...like brackets in the name field.
-5. Once its good, you can download the form as a csv file, place into the same directory as the createrepos script
-6. Edit the createrepo script by filling in your github id, access token, organization, name of the csv file, and logfile name.
-7. run the script.  This will:
+3. Once the students have filled in their info, do a quick check for duplicate entries and other mistakes...like brackets in the name fields.
+4. Once the spreadsheet is good, you can download it as a csv file, place into the same directory as the createrepos script
+5. Edit the createrepo script by filling in your github id, access token, organization, name of the csv file, and logfile name.
+6. run the script.  This will:
      * generate a private repo for each entry named according the the student's full name (spaces will be automatically removed)
      * create a team based on the full name
      * add the githubid to the team
@@ -50,6 +49,24 @@ These scripts were originally designed to help set up private repos for students
  The additional entries will be logged into the same log file as long as you don't change the log file name in the script.
  
  
-#### To clone every repo associated log file
+#### log file
  
-The idea is that each semester you can run the script and create a set of repos for your students for a course.  However, you may need to keep a record of student work around for a length of time pass the end of the course.  
+The assumption made is that repos that were created (and thus logged into the same log file) have a related relevancy.  That is, you will likely want to see all repos related to the log file together.  When it comes to cleaning up the repos (deleting them) you are likely to want to delete them at the same time.  The deleteallrepos script is designed to only delete the repos associated with a particular log file while leaving other repos alone.
+
+
+#### to clone based on log file
+
+* Use the clonelog script
+* Edit appropraite variables in script with your github id, organization name, access token and log file
+* Run the script
+
+#### to delete repos based on log file
+
+* Use the deleteallrepos script
+* Edit appropraite variables in script with your github id, organization name, access token and log file name
+* run the script
+
+#### To clone every repo
+* use the cloneall script
+* Edit appropraite variables in script with your github id, organization name, access token
+* run script
